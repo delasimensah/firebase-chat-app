@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 // firebase
 import { register, login } from "../firebase/authentication";
@@ -15,8 +14,6 @@ const defaultFormFields = {
 };
 
 const Authentication = () => {
-  const navigate = useNavigate();
-
   const [isLogin, setIsLogin] = useState(true);
   const [formFields, setFormFields] = useState(defaultFormFields);
   const [loading, setLoading] = useState(false);
@@ -33,6 +30,12 @@ const Authentication = () => {
     setFormFields({ ...formFields, [name]: value });
   };
 
+  const handleErrors = (error) => {
+    console.log(error);
+    resetFormFields();
+    setLoading(false);
+  };
+
   const handleAuthentication = async () => {
     setLoading(true);
 
@@ -40,10 +43,9 @@ const Authentication = () => {
       try {
         await login(email, password);
       } catch (error) {
-        console.log(error.message);
-        resetFormFields();
-        setLoading(false);
+        handleErrors();
       }
+
       return;
     }
 
@@ -51,8 +53,7 @@ const Authentication = () => {
       await register(formFields);
     } catch (error) {
       console.log(error.message);
-      resetFormFields();
-      setLoading(false);
+      handleErrors();
     }
   };
 
@@ -132,14 +133,14 @@ const Authentication = () => {
           </LoadingButton>
 
           <Stack direction="row" alignItems="center" justifyContent="center">
-            <Typography sx={{ fontSize: "13px" }}>
+            <Typography sx={{ fontSize: "15px" }}>
               {isLogin ? "Don't have an account?" : "Already have an account?"}
             </Typography>
 
             <Button
               sx={{
                 textTransform: "capitalize",
-                fontSize: "13px",
+                fontSize: "15px",
                 "&:hover": {
                   background: "transparent",
                 },
