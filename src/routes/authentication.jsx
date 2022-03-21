@@ -1,7 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+// firebase
+import { register, login } from "../firebase/authentication";
 
 // mui
 import { Stack, TextField, Typography, Button } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const defaultFormFields = {
   username: "",
@@ -10,8 +15,11 @@ const defaultFormFields = {
 };
 
 const Authentication = () => {
+  const navigate = useNavigate();
+
   const [isLogin, setIsLogin] = useState(true);
   const [formFields, setFormFields] = useState(defaultFormFields);
+  const [loading, setLoading] = useState(false);
 
   const { username, email, password } = formFields;
 
@@ -25,15 +33,27 @@ const Authentication = () => {
     setFormFields({ ...formFields, [name]: value });
   };
 
-  const handleAuthentication = () => {
+  const handleAuthentication = async () => {
+    setLoading(true);
+
     if (isLogin) {
-      console.log({ email, password });
-      resetFormFields();
+      try {
+        await login(email, password);
+      } catch (error) {
+        console.log(error.message);
+        resetFormFields();
+        setLoading(false);
+      }
       return;
     }
 
-    console.log({ username, email, password });
-    resetFormFields();
+    try {
+      await register(formFields);
+    } catch (error) {
+      console.log(error.message);
+      resetFormFields();
+      setLoading(false);
+    }
   };
 
   return (
@@ -55,7 +75,11 @@ const Authentication = () => {
         spacing={3}
       >
         <Typography
-          sx={{ textAlign: "center", textTransform: "uppercase" }}
+          sx={{
+            textAlign: "center",
+            textTransform: "uppercase",
+            color: "primary.main",
+          }}
           variant="h5"
         >
           {isLogin ? "Login" : "Register"}
@@ -93,7 +117,7 @@ const Authentication = () => {
         </Stack>
 
         <Stack spacing={1}>
-          <Button
+          <LoadingButton
             variant="contained"
             disableElevation
             onClick={handleAuthentication}
@@ -102,9 +126,10 @@ const Authentication = () => {
                 ? email === "" || password === ""
                 : username === "" || email === "" || password === ""
             }
+            loading={loading}
           >
             {isLogin ? "Login" : "Register"}
-          </Button>
+          </LoadingButton>
 
           <Stack direction="row" alignItems="center" justifyContent="center">
             <Typography sx={{ fontSize: "13px" }}>

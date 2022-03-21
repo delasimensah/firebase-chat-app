@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 
+// routes
 import Authentication from "./routes/authentication";
 import Chats from "./routes/chats";
 import Chat from "./routes/chat";
