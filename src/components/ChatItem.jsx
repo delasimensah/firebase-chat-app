@@ -30,7 +30,7 @@ const ChatItem = ({ chat, otherMember }) => {
               {otherMember.username}
             </Typography>
           }
-          secondary="Cool"
+          secondary={chat.lastMessage}
         />
       </ListItemButton>
     </ListItem>

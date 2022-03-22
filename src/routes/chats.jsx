@@ -9,10 +9,11 @@ import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { logout } from "../firebase/authentication.js";
 
 // mui
-import { Stack, Button, List } from "@mui/material";
+import { Stack, Button, List, TextField, Typography } from "@mui/material";
 
 // components
 import ChatItem from "../components/ChatItem";
+import SearchResult from "../components/SearchResult";
 // import ChatListSkeleton from "../components/ChatListSkeleton";
 
 const Chats = () => {
@@ -23,6 +24,24 @@ const Chats = () => {
 
   const [chats, setChats] = useState(storedChatList);
   // const [loading, setLoading] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    const q = query(
+      collection(db, "users"),
+      where("username", "==", searchText)
+    );
+
+    // setLoading(true);
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = querySnapshot.docs.map((doc) => doc.data());
+
+      setSearchResults(data);
+    });
+
+    return () => unsubscribe();
+  }, [searchText]);
 
   useEffect(() => {
     const q = query(
@@ -58,9 +77,57 @@ const Chats = () => {
             sm: "40%",
           },
           height: "100vh",
+          position: "relative",
         }}
       >
-        <Button onClick={() => logout()}>Logout</Button>
+        <Button
+          onClick={() => {
+            logout();
+            localStorage.setItem("chatlist", []);
+          }}
+        >
+          Logout
+        </Button>
+
+        <Stack sx={{}}>
+          <TextField
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+
+          {searchText && (
+            <Stack
+              sx={{
+                height: 100,
+                width: "100%",
+                zIndex: 5000,
+                border: "1px solid black",
+                background: "white",
+                position: "absolute",
+                top: 90,
+                bottom: 0,
+              }}
+            >
+              {searchResults.length ? (
+                <List>
+                  {searchResults.map((result, idx) => (
+                    <SearchResult
+                      key={idx}
+                      result={result}
+                      setSearchText={setSearchText}
+                      chats={chats}
+                    />
+                  ))}
+                </List>
+              ) : (
+                <Stack>
+                  {" "}
+                  <Typography>No results</Typography>
+                </Stack>
+              )}
+            </Stack>
+          )}
+        </Stack>
 
         <List>
           {chats.map((chat) => {
