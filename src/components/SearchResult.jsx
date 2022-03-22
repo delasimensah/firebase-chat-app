@@ -16,11 +16,11 @@ import {
   Avatar,
 } from "@mui/material";
 
-const SearchResult = ({ result, setSearchText, chats }) => {
+const SearchResult = ({ result, setSearchText }) => {
   const { currentUser } = useAuth();
 
   const handleCreateChat = async () => {
-    await createChat(result, currentUser, chats);
+    await createChat(result, currentUser);
     setSearchText("");
   };
   return (

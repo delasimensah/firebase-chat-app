@@ -1,7 +1,7 @@
 import { db } from "./firebaseConfig";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
-export const createChat = async (result, currentUser, chats) => {
+export const createChat = async (result, currentUser) => {
   if (result.username === currentUser.username) {
     console.log("cannot start chat with self");
     return;

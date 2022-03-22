@@ -71,7 +71,6 @@ const Chats = () => {
     <Stack justifyContent="center" alignItems="center">
       <Stack
         sx={{
-          // border: "1px solid black",
           width: {
             xs: "100%",
             sm: "40%",
@@ -91,6 +90,7 @@ const Chats = () => {
 
         <Stack sx={{}}>
           <TextField
+            placeholder="Search users"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
@@ -98,7 +98,7 @@ const Chats = () => {
           {searchText && (
             <Stack
               sx={{
-                height: 100,
+                height: "200px",
                 width: "100%",
                 zIndex: 5000,
                 border: "1px solid black",
@@ -106,6 +106,7 @@ const Chats = () => {
                 position: "absolute",
                 top: 90,
                 bottom: 0,
+                overflowY: "auto",
               }}
             >
               {searchResults.length ? (
@@ -115,7 +116,6 @@ const Chats = () => {
                       key={idx}
                       result={result}
                       setSearchText={setSearchText}
-                      chats={chats}
                     />
                   ))}
                 </List>
