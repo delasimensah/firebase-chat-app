@@ -31,7 +31,7 @@ const App = () => {
       />
 
       <Route
-        path="chat"
+        path="chats/:chat"
         element={
           <RequireAuth>
             <Chat />
