@@ -19,7 +19,7 @@ const ChatItem = ({ chat, otherMember }) => {
     <ListItem disablePadding>
       <ListItemButton
         disableRipple
-        onClick={() => navigate(`chats/${chat.id}`)}
+        onClick={() => navigate(`${chat.id}`, { state: otherMember.username })}
       >
         <ListItemAvatar>
           <Avatar

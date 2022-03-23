@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { stringToColor } from "../utils/stringToColor";
 
 // context
@@ -19,10 +20,13 @@ import {
 
 const SearchResult = ({ hit }) => {
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
 
   const handleCreateChat = async () => {
+    navigate(`${currentUser.userId}_${hit.objectID}`, { state: hit.username });
     await createChat(hit, currentUser);
   };
+
   return (
     <ListItem disablePadding>
       <ListItemButton disableRipple onClick={handleCreateChat}>

@@ -1,5 +1,5 @@
 import { db } from "./firebaseConfig";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
 
 export const createChat = async (result, currentUser) => {
   if (result.username === currentUser.username) {
@@ -24,4 +24,8 @@ export const createChat = async (result, currentUser) => {
     createdAt: new Date(),
     lastMessage: "",
   });
+};
+
+export const deleteChat = async (chatId) => {
+  await deleteDoc(doc(db, "chats", chatId));
 };

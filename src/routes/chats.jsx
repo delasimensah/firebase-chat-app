@@ -38,27 +38,8 @@ const Chats = () => {
     : [];
 
   const [chats, setChats] = useState(storedChatList);
-  // const [loading, setLoading] = useState(false);
-  // const [searchText, setSearchText] = useState("");
-  // const [searchResults, setSearchResults] = useState([]);
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
   const [openNewChatDialog, setOpenNewChatDialog] = useState(false);
-
-  // useEffect(() => {
-  //   const q = query(
-  //     collection(db, "users"),
-  //     where("username", "==", searchText)
-  //   );
-
-  //   // setLoading(true);
-  //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-  //     const data = querySnapshot.docs.map((doc) => doc.data());
-
-  //     setSearchResults(data);
-  //   });
-
-  //   return () => unsubscribe();
-  // }, [searchText]);
 
   useEffect(() => {
     const q = query(
