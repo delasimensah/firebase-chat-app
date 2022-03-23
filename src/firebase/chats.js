@@ -1,5 +1,13 @@
 import { db } from "./firebaseConfig";
-import { doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  getDoc,
+  deleteDoc,
+  collection,
+  addDoc,
+  updateDoc,
+} from "firebase/firestore";
 
 export const createChat = async (result, currentUser) => {
   if (result.username === currentUser.username) {
@@ -22,10 +30,31 @@ export const createChat = async (result, currentUser) => {
       { id: result.objectID, username: result.username },
     ],
     createdAt: new Date(),
-    lastMessage: "",
+    lastMessage: null,
   });
 };
 
 export const deleteChat = async (chatId) => {
   await deleteDoc(doc(db, "chats", chatId));
+};
+
+export const createMessage = async (chatId, text, sender) => {
+  const messagesRef = collection(db, "chats", chatId, "messages");
+  const chatRef = doc(db, "chats", chatId);
+
+  const newMessage = {
+    text,
+    sender,
+    createdAt: new Date(),
+    attachments: [],
+    read: false,
+  };
+
+  // add new message
+  await addDoc(messagesRef, newMessage);
+
+  //  update last message for chat
+  await updateDoc(chatRef, {
+    lastMessage: newMessage,
+  });
 };

@@ -6,7 +6,13 @@ import { useAuth } from "../contexts/UserContext";
 
 // firebase
 import { db } from "../firebase/firebaseConfig";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  orderBy,
+} from "firebase/firestore";
 
 // mui
 import {
@@ -47,7 +53,8 @@ const Chats = () => {
       where("members", "array-contains", {
         id: currentUser.userId,
         username: currentUser.username,
-      })
+      }),
+      orderBy("createdAt", "desc")
     );
 
     // setLoading(true);

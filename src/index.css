@@ -8,18 +8,9 @@
   box-sizing: border-box;
   font-family: "Nunito", sans-serif;
 
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary) var(--tertiary);
+  scrollbar-width: none;
 }
 
-body::-webkit-scrollbar {
-  width: 0.5rem;
-}
-
-body::-webkit-scrollbar-track {
-  background: var(--tertiary);
-}
-
-body::-webkit-scrollbar-thumb {
-  background: var(--primary);
+*::-webkit-scrollbar {
+  display: none;
 }

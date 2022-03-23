@@ -37,7 +37,18 @@ const ChatItem = ({ chat, otherMember }) => {
               {otherMember.username}
             </Typography>
           }
-          secondary={chat.lastMessage}
+          secondary={
+            <Typography
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                width: "200px",
+              }}
+            >
+              {chat.lastMessage?.text}
+            </Typography>
+          }
         />
       </ListItemButton>
     </ListItem>
