@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { IoLogOutOutline, IoCreateOutline } from "react-icons/io5";
 
 // context
 import { useAuth } from "../contexts/UserContext";
@@ -6,15 +7,29 @@ import { useAuth } from "../contexts/UserContext";
 // firebase
 import { db } from "../firebase/firebaseConfig";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { logout } from "../firebase/authentication.js";
 
 // mui
-import { Stack, Button, List, TextField, Typography } from "@mui/material";
+import {
+  Stack,
+  Button,
+  List,
+  Typography,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 // components
 import ChatItem from "../components/ChatItem";
-import SearchResult from "../components/SearchResult";
 // import ChatListSkeleton from "../components/ChatListSkeleton";
+import LogoutDialog from "../components/dialogs/LogoutDialog";
+import NewChatDialog from "../components/dialogs/NewChatDialog";
+
+const CustomIconButton = styled(IconButton)({
+  "&:hover": {
+    background: "transparent",
+  },
+});
 
 const Chats = () => {
   const { currentUser } = useAuth();
@@ -24,24 +39,26 @@ const Chats = () => {
 
   const [chats, setChats] = useState(storedChatList);
   // const [loading, setLoading] = useState(false);
-  const [searchText, setSearchText] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  // const [searchText, setSearchText] = useState("");
+  // const [searchResults, setSearchResults] = useState([]);
+  const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
+  const [openNewChatDialog, setOpenNewChatDialog] = useState(false);
 
-  useEffect(() => {
-    const q = query(
-      collection(db, "users"),
-      where("username", "==", searchText)
-    );
+  // useEffect(() => {
+  //   const q = query(
+  //     collection(db, "users"),
+  //     where("username", "==", searchText)
+  //   );
 
-    // setLoading(true);
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const data = querySnapshot.docs.map((doc) => doc.data());
+  //   // setLoading(true);
+  //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  //     const data = querySnapshot.docs.map((doc) => doc.data());
 
-      setSearchResults(data);
-    });
+  //     setSearchResults(data);
+  //   });
 
-    return () => unsubscribe();
-  }, [searchText]);
+  //   return () => unsubscribe();
+  // }, [searchText]);
 
   useEffect(() => {
     const q = query(
@@ -79,67 +96,70 @@ const Chats = () => {
           position: "relative",
         }}
       >
-        <Button
-          onClick={() => {
-            logout();
-            localStorage.setItem("chatlist", []);
-          }}
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
         >
-          Logout
-        </Button>
+          <>
+            <Tooltip title="Logout">
+              <CustomIconButton onClick={() => setOpenLogoutDialog(true)}>
+                <IoLogOutOutline />
+              </CustomIconButton>
+            </Tooltip>
 
-        <Stack sx={{}}>
-          <TextField
-            placeholder="Search users"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-          />
+            <LogoutDialog
+              handleClose={() => setOpenLogoutDialog(false)}
+              open={openLogoutDialog}
+            />
+          </>
 
-          {searchText && (
-            <Stack
-              sx={{
-                height: "200px",
-                width: "100%",
-                zIndex: 5000,
-                border: "1px solid black",
-                background: "white",
-                position: "absolute",
-                top: 90,
-                bottom: 0,
-                overflowY: "auto",
-              }}
-            >
-              {searchResults.length ? (
-                <List>
-                  {searchResults.map((result, idx) => (
-                    <SearchResult
-                      key={idx}
-                      result={result}
-                      setSearchText={setSearchText}
-                    />
-                  ))}
-                </List>
-              ) : (
-                <Stack>
-                  {" "}
-                  <Typography>No results</Typography>
-                </Stack>
-              )}
-            </Stack>
-          )}
+          <Typography sx={{ textTransform: "capitalize" }}>
+            {currentUser.username}
+          </Typography>
+
+          <>
+            <Tooltip title="New Chat">
+              <CustomIconButton onClick={() => setOpenNewChatDialog(true)}>
+                <IoCreateOutline />
+              </CustomIconButton>
+            </Tooltip>
+
+            <NewChatDialog
+              handleClose={() => setOpenNewChatDialog(false)}
+              open={openNewChatDialog}
+            />
+          </>
         </Stack>
 
-        <List>
-          {chats.map((chat) => {
-            const otherMember = chat.members.find(
-              (member) => member.id !== currentUser.userId
-            );
+        {chats.length ? (
+          <List>
+            {chats.map((chat) => {
+              const otherMember = chat.members.find(
+                (member) => member.id !== currentUser.userId
+              );
 
-            return (
-              <ChatItem key={chat.id} chat={chat} otherMember={otherMember} />
-            );
-          })}
-        </List>
+              return (
+                <ChatItem key={chat.id} chat={chat} otherMember={otherMember} />
+              );
+            })}
+          </List>
+        ) : (
+          <Stack
+            justifyContent="center"
+            alignItems="center"
+            sx={{ flexGrow: 1 }}
+            spacing={1}
+          >
+            <Typography>No Messages</Typography>
+            <Button
+              sx={{ textTransform: "capitalize" }}
+              onClick={() => setOpenNewChatDialog(true)}
+            >
+              Start a message
+            </Button>
+          </Stack>
+        )}
       </Stack>
     </Stack>
   );

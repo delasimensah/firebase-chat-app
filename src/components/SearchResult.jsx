@@ -1,4 +1,5 @@
 import React from "react";
+import { stringToColor } from "../utils/stringToColor";
 
 // context
 import { useAuth } from "../contexts/UserContext";
@@ -16,24 +17,29 @@ import {
   Avatar,
 } from "@mui/material";
 
-const SearchResult = ({ result, setSearchText }) => {
+const SearchResult = ({ hit }) => {
   const { currentUser } = useAuth();
 
   const handleCreateChat = async () => {
-    await createChat(result, currentUser);
-    setSearchText("");
+    await createChat(hit, currentUser);
   };
   return (
     <ListItem disablePadding>
       <ListItemButton disableRipple onClick={handleCreateChat}>
         <ListItemAvatar>
-          <Avatar>{result.username.toUpperCase()[0]}</Avatar>
+          <Avatar
+            sx={{
+              bgcolor: stringToColor(hit.username),
+            }}
+          >
+            {hit.username.toUpperCase()[0]}
+          </Avatar>
         </ListItemAvatar>
 
         <ListItemText
           primary={
             <Typography sx={{ textTransform: "capitalize" }}>
-              {result.username}
+              {hit.username}
             </Typography>
           }
         />

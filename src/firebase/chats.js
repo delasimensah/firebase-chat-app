@@ -7,7 +7,7 @@ export const createChat = async (result, currentUser) => {
     return;
   }
 
-  const chatRef = doc(db, "chats", `${currentUser.userId}_${result.userId}`);
+  const chatRef = doc(db, "chats", `${currentUser.userId}_${result.objectID}`);
 
   const chatSnapshot = await getDoc(chatRef);
 
@@ -19,9 +19,9 @@ export const createChat = async (result, currentUser) => {
   await setDoc(chatRef, {
     members: [
       { id: currentUser.userId, username: currentUser.username },
-      { id: result.userId, username: result.username },
+      { id: result.objectID, username: result.username },
     ],
-    createAt: new Date(),
+    createdAt: new Date(),
     lastMessage: "",
   });
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { stringToColor } from "../utils/stringToColor";
 
 // mui
 import {
@@ -21,7 +22,13 @@ const ChatItem = ({ chat, otherMember }) => {
         onClick={() => navigate(`chats/${chat.id}`)}
       >
         <ListItemAvatar>
-          <Avatar>{otherMember.username.toUpperCase()[0]}</Avatar>
+          <Avatar
+            sx={{
+              bgcolor: stringToColor(otherMember.username),
+            }}
+          >
+            {otherMember.username.toUpperCase()[0]}
+          </Avatar>
         </ListItemAvatar>
 
         <ListItemText
