@@ -70,12 +70,12 @@ const CustomHits = connectHits(Hits);
 
 const NewChatDialog = ({ handleClose, open }) => {
   return (
-    <Dialog onClose={handleClose} open={open} maxWidth="lg">
+    <Dialog onClose={handleClose} open={open} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ fontSize: "16px", textAlign: "center" }}>
         New Message
       </DialogTitle>
 
-      <Box sx={{ width: "250px", padding: "10px" }}>
+      <Box sx={{ padding: "10px" }}>
         <InstantSearch searchClient={searchClient} indexName="users">
           <CustomSearchBox />
           <Configure hitsPerPage={10} />
