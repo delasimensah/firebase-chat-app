@@ -26,7 +26,6 @@ const Messages = ({ chatId }) => {
       }));
 
       setMessages(data);
-      // localStorage.setItem("chatlist", JSON.stringify(data));
     });
 
     return () => unsubscribe();

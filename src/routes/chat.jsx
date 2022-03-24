@@ -1,6 +1,9 @@
 import React from "react";
 import { useLocation, useParams } from "react-router-dom";
 
+// firebase
+// import { updateLastMessage } from "../firebase/chats";
+
 // mui
 import { Stack } from "@mui/material";
 

@@ -58,3 +58,20 @@ export const createMessage = async (chatId, text, sender) => {
     lastMessage: newMessage,
   });
 };
+
+export const updateLastMessage = async (chatId) => {
+  const chatRef = doc(db, "chats", chatId);
+  const chatSnapshot = await getDoc(chatRef);
+  const { lastMessage } = chatSnapshot.data();
+
+  //  update last message for chat
+
+  if (lastMessage) {
+    await updateDoc(chatRef, {
+      lastMessage: {
+        ...lastMessage,
+        read: true,
+      },
+    });
+  }
+};
