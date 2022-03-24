@@ -29,7 +29,7 @@ export const createChat = async (result, currentUser) => {
       { id: currentUser.userId, username: currentUser.username },
       { id: result.objectID, username: result.username },
     ],
-    createdAt: new Date(),
+    createdAt: new Date().toISOString(),
     lastMessage: null,
   });
 };
@@ -45,7 +45,7 @@ export const createMessage = async (chatId, text, sender) => {
   const newMessage = {
     text,
     sender,
-    createdAt: new Date(),
+    createdAt: new Date().toISOString(),
     attachments: [],
     read: false,
   };

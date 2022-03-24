@@ -31,7 +31,7 @@ export const createUserDocument = async (userAuth, username) => {
   const userDocRef = doc(db, "users", userAuth.uid);
 
   const { email } = userAuth;
-  const createdAt = new Date();
+  const createdAt = new Date().toISOString();
 
   await setDoc(userDocRef, {
     username,
