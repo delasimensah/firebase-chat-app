@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 // context
 import { useAuth } from "../contexts/UserContext";
@@ -12,8 +12,15 @@ const Message = ({ message }) => {
   } = useAuth();
   const { sender } = message;
 
+  const scrollRef = useRef();
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [message]);
+
   return (
     <Box
+      ref={scrollRef}
       sx={{
         display: "inline",
         alignSelf: sender === username ? "flex-end" : "flex-start",

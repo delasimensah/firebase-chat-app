@@ -23,7 +23,7 @@ const MessageForm = ({ chatId }) => {
       direction="row"
       alignItems="center"
       spacing={1}
-      sx={{ border: "1px solid black" }}
+      // sx={{ border: "1px solid black" }}
     >
       <TextField
         placeholder="Type message here"
