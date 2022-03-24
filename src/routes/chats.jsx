@@ -58,7 +58,8 @@ const Chats = () => {
     });
 
     return () => unsubscribe();
-  }, [currentUser, chats]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Stack justifyContent="center" alignItems="center">

@@ -14,8 +14,8 @@ const MessageForm = ({ chatId }) => {
   const [message, setMessage] = useState("");
 
   const handleSendMessage = async () => {
-    await createMessage(chatId, message, currentUser.username);
     setMessage("");
+    await createMessage(chatId, message, currentUser.username);
   };
 
   return (

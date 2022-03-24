@@ -14,9 +14,9 @@ const ChatListSkeleton = () => {
 
   return (
     <List sx={{ width: "100%" }}>
-      {array.map((_) => {
+      {array.map((_, idx) => {
         return (
-          <ListItem>
+          <ListItem key={idx}>
             <ListItemAvatar>
               <Skeleton variant="circular" width={40} height={40} />
             </ListItemAvatar>
