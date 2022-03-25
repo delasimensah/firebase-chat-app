@@ -1,9 +1,9 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../contexts/UserContext";
+import { useUser } from "../contexts/UserContext";
 
 const RequireAuth = ({ children }) => {
-  const { currentUser } = useAuth();
+  const { currentUser } = useUser();
 
   if (!currentUser) {
     return <Navigate to="/auth" replace />;

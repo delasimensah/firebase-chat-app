@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from "react";
 
 // context
-import { useAuth } from "../contexts/UserContext";
+import { useUser } from "../contexts/UserContext";
 
 // mui
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 
 const Message = ({ message }) => {
   const {
     currentUser: { username },
-  } = useAuth();
+  } = useUser();
   const { sender } = message;
 
   const scrollRef = useRef();

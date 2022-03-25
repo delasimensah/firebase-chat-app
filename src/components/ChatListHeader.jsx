@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { IoLogOutOutline, IoCreateOutline } from "react-icons/io5";
 
 // context
-import { useAuth } from "../contexts/UserContext";
+import { useUser } from "../contexts/UserContext";
 
 // mui
 import { Stack, Typography, IconButton, Tooltip } from "@mui/material";
@@ -19,7 +19,7 @@ const CustomIconButton = styled(IconButton)({
 });
 
 const ChatListHeader = ({ openNewChatDialog, setOpenNewChatDialog }) => {
-  const { currentUser } = useAuth();
+  const { currentUser } = useUser();
 
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
 

@@ -8,6 +8,7 @@ import {
   where,
   getDocs,
   limit,
+  updateDoc,
 } from "firebase/firestore";
 
 export const checkUsernameExists = async (username) => {
@@ -38,6 +39,19 @@ export const createUserDocument = async (userAuth, username) => {
     email,
     createdAt,
     userId: userAuth.uid,
+    isOnline: true,
+  });
+};
+
+export const updateOnlineStatus = async (userId) => {
+  const userDocRef = doc(db, "users", userId);
+
+  const userSnapshot = await getDoc(userDocRef);
+
+  const { isOnline } = userSnapshot.data();
+
+  await updateDoc(userDocRef, {
+    isOnline: !isOnline,
   });
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 
 // context
-import { useAuth } from "../contexts/UserContext";
+import { useUser } from "../contexts/UserContext";
 
 // mui
 import { List } from "@mui/material";
@@ -10,7 +10,7 @@ import { List } from "@mui/material";
 import ChatItem from "./ChatItem";
 
 const ChatList = ({ chats }) => {
-  const { currentUser } = useAuth();
+  const { currentUser } = useUser();
   return (
     <List>
       {chats.map((chat) => {

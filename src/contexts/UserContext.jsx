@@ -7,7 +7,7 @@ import { getUserDocument } from "../firebase/users";
 
 const UserContext = createContext({});
 
-export const useAuth = () => useContext(UserContext);
+export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
   const navigate = useNavigate();

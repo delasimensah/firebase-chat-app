@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 // context
-import { useAuth } from "../contexts/UserContext";
+import { useUser } from "../contexts/UserContext";
 
 // firebase
 import { db } from "../firebase/firebaseConfig";
@@ -23,7 +23,7 @@ import ChatList from "../components/ChatList";
 import NoChats from "../components/NoChats";
 
 const Chats = () => {
-  const { currentUser } = useAuth();
+  const { currentUser } = useUser();
   const storedChatList = localStorage.getItem("chatlist")
     ? JSON.parse(localStorage.getItem("chatlist"))
     : [];

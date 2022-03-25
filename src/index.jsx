@@ -6,6 +6,7 @@ import { muiTheme } from "./utils/muiTheme.js";
 
 // contexts
 import { UserProvider } from "./contexts/UserContext";
+import { MessageProvider } from "./contexts/MessageContext";
 
 // components
 import App from "./App";
@@ -18,7 +19,9 @@ ReactDOM.render(
     <BrowserRouter>
       <ThemeProvider theme={muiTheme}>
         <UserProvider>
-          <App />
+          <MessageProvider>
+            <App />
+          </MessageProvider>
         </UserProvider>
       </ThemeProvider>
     </BrowserRouter>

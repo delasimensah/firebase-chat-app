@@ -45,7 +45,8 @@ export const createMessage = async (chatId, text, sender) => {
   const newMessage = {
     text,
     sender,
-    createdAt: new Date().toISOString(),
+    createdAt: new Date().toDateString(),
+    time: new Date().toTimeString(),
     attachments: [],
     read: false,
   };

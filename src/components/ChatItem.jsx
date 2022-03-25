@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { stringToColor } from "../utils/stringToColor";
 
 // context
-import { useAuth } from "../contexts/UserContext";
+import { useUser } from "../contexts/UserContext";
 
 // mui
 import {
@@ -21,7 +21,7 @@ const ChatItem = ({ chat, otherMember }) => {
   const navigate = useNavigate();
   const {
     currentUser: { username },
-  } = useAuth();
+  } = useUser();
 
   return (
     <ListItem disablePadding>

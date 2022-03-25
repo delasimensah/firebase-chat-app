@@ -8,7 +8,7 @@ import {
 } from "react-instantsearch-dom";
 
 // context
-import { useAuth } from "../../contexts/UserContext";
+import { useUser } from "../../contexts/UserContext";
 
 // mui
 import {
@@ -44,7 +44,7 @@ const SearchBox = ({ currentRefinement, refine }) => {
 const Hits = ({ hits }) => {
   const {
     currentUser: { username },
-  } = useAuth();
+  } = useUser();
 
   const filteredHits = hits.filter((hit) => hit.username !== username);
 

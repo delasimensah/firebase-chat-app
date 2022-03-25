@@ -1,5 +1,9 @@
 import { auth } from "./firebaseConfig";
-import { createUserDocument, checkUsernameExists } from "./users";
+import {
+  createUserDocument,
+  checkUsernameExists,
+  updateOnlineStatus,
+} from "./users";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -17,9 +21,11 @@ export const register = async ({ username, email, password }) => {
 };
 
 export const login = async (email, password) => {
-  await signInWithEmailAndPassword(auth, email, password);
+  const { user } = await signInWithEmailAndPassword(auth, email, password);
+  await updateOnlineStatus(user.uid);
 };
 
 export const logout = async () => {
+  await updateOnlineStatus(auth.currentUser.uid);
   await signOut(auth);
 };

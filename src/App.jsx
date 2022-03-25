@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 // context
-import { useAuth } from "./contexts/UserContext";
+import { useUser } from "./contexts/UserContext";
 
 // routes
 import Authentication from "./routes/authentication";
@@ -12,7 +12,7 @@ import Chat from "./routes/chat";
 import RequireAuth from "./components/RequireAuth";
 
 const App = () => {
-  const { currentUser } = useAuth();
+  const { currentUser } = useUser();
 
   return (
     <Routes>

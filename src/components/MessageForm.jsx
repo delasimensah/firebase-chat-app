@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 
 // context
-import { useAuth } from "../contexts/UserContext";
+import { useUser } from "../contexts/UserContext";
+import { useMessage } from "../contexts/MessageContext";
 
 // firebase
 import { createMessage } from "../firebase/chats";
@@ -10,12 +11,12 @@ import { createMessage } from "../firebase/chats";
 import { Stack, TextField, Button } from "@mui/material";
 
 const MessageForm = ({ chatId }) => {
-  const { currentUser } = useAuth();
-  const [message, setMessage] = useState("");
+  const { currentUser } = useUser();
+  const { messageText, setMessageText } = useMessage();
 
   const handleSendMessage = async () => {
-    setMessage("");
-    await createMessage(chatId, message, currentUser.username);
+    setMessageText("");
+    await createMessage(chatId, messageText, currentUser.username);
   };
 
   return (
@@ -28,8 +29,8 @@ const MessageForm = ({ chatId }) => {
       <TextField
         placeholder="Type message here"
         fullWidth
-        onChange={(e) => setMessage(e.target.value)}
-        value={message}
+        onChange={(e) => setMessageText(e.target.value)}
+        value={messageText}
         multiline
         maxRows={4}
       />

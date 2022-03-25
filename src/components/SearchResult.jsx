@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { stringToColor } from "../utils/stringToColor";
 
 // context
-import { useAuth } from "../contexts/UserContext";
+import { useUser } from "../contexts/UserContext";
 
 // firebase
 import { createChat } from "../firebase/chats";
@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 
 const SearchResult = ({ hit }) => {
-  const { currentUser } = useAuth();
+  const { currentUser } = useUser();
   const navigate = useNavigate();
 
   const handleCreateChat = async () => {
