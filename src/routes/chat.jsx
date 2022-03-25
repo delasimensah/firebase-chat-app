@@ -24,7 +24,7 @@ const Chat = () => {
           height: "100vh",
         }}
       >
-        <ChatHeader username={state} chat={chat} />
+        <ChatHeader username={state.username} chat={chat} />
 
         <Messages chatId={chat} />
 

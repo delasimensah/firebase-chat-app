@@ -5,9 +5,6 @@ import { stringToColor } from "../utils/stringToColor";
 // context
 import { useUser } from "../contexts/UserContext";
 
-// firebase
-import { createChat } from "../firebase/chats";
-
 // mui
 import {
   Typography,
@@ -23,8 +20,9 @@ const SearchResult = ({ hit }) => {
   const navigate = useNavigate();
 
   const handleCreateChat = async () => {
-    navigate(`${currentUser.userId}_${hit.objectID}`, { state: hit.username });
-    await createChat(hit, currentUser);
+    navigate(`${currentUser.userId}_${hit.objectID}`, {
+      state: { username: hit.username, objectID: hit.objectID },
+    });
   };
 
   return (

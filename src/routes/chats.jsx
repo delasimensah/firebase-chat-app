@@ -55,8 +55,8 @@ const Chats = () => {
 
       const unreadMessages = data.filter((msg) => {
         return (
-          msg.lastMessage.read === false &&
-          msg.lastMessage.sender !== currentUser.username
+          msg.lastMessage?.read === false &&
+          msg.lastMessage?.sender !== currentUser.username
         );
       });
 

@@ -5,7 +5,7 @@ import { useUser } from "../contexts/UserContext";
 import { useMessage } from "../contexts/MessageContext";
 
 // firebase
-import { createMessage } from "../firebase/chats";
+import { createChat, createMessage } from "../firebase/chats";
 
 // mui
 import { Stack, TextField, Button } from "@mui/material";
@@ -16,7 +16,13 @@ const MessageForm = ({ chatId, receipient }) => {
 
   const handleSendMessage = async () => {
     setMessageText("");
-    await createMessage(chatId, messageText, currentUser.username, receipient);
+    await createChat(receipient, currentUser, chatId);
+    await createMessage(
+      chatId,
+      messageText,
+      currentUser.username,
+      receipient.username
+    );
   };
 
   return (

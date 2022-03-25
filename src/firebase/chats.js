@@ -9,31 +9,28 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
-export const createChat = async (result, currentUser) => {
-  if (result.username === currentUser.username) {
-    console.log("cannot start chat with self");
-    return;
-  }
+export const createChat = async (result, currentUser, chatId) => {
+  // if (result.username === currentUser.username) {
+  //   console.log("cannot start chat with self");
+  //   return;
+  // }
 
-  const chatRef = doc(db, "chats", `${currentUser.userId}_${result.objectID}`);
+  const chatRef = doc(db, "chats", chatId);
 
   const chatSnapshot = await getDoc(chatRef);
 
-  if (chatSnapshot.exists()) {
-    console.log("chat already exists");
-    return;
+  if (!chatSnapshot.exists()) {
+    await setDoc(chatRef, {
+      members: [
+        { id: currentUser.userId, username: currentUser.username },
+        { id: result.objectID, username: result.username },
+      ],
+      createdAt: new Date().toISOString(),
+      lastMessage: null,
+      [`${currentUser.username}UnreadMessagesCount`]: 0,
+      [`${result.username}UnreadMessagesCount`]: 0,
+    });
   }
-
-  await setDoc(chatRef, {
-    members: [
-      { id: currentUser.userId, username: currentUser.username },
-      { id: result.objectID, username: result.username },
-    ],
-    createdAt: new Date().toISOString(),
-    lastMessage: null,
-    [`${currentUser.username}UnreadMessagesCount`]: 0,
-    [`${result.username}UnreadMessagesCount`]: 0,
-  });
 };
 
 export const deleteChat = async (chatId) => {
@@ -70,13 +67,13 @@ export const createMessage = async (chatId, text, sender, receipient) => {
 export const updateLastMessage = async (chatId, currentUser) => {
   const chatRef = doc(db, "chats", chatId);
   const chatSnapshot = await getDoc(chatRef);
-  const { lastMessage } = chatSnapshot.data();
+  const data = chatSnapshot.data();
 
-  const sender = lastMessage.sender;
+  const sender = data?.lastMessage.sender;
 
-  if (sender !== currentUser) {
+  if (data && sender !== currentUser) {
     const updatedLastMessage = {
-      ...lastMessage,
+      ...data.lastMessage,
       read: true,
     };
 
