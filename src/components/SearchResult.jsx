@@ -5,6 +5,9 @@ import { stringToColor } from "../utils/stringToColor";
 // context
 import { useUser } from "../contexts/UserContext";
 
+// firebase
+import { checkIfExisitingChatHasBothMembers } from "../firebase/chats";
+
 // mui
 import {
   Typography,
@@ -20,9 +23,19 @@ const SearchResult = ({ hit }) => {
   const navigate = useNavigate();
 
   const handleCreateChat = async () => {
-    navigate(`${currentUser.userId}_${hit.objectID}`, {
-      state: { username: hit.username, objectID: hit.objectID },
-    });
+    const exists = await checkIfExisitingChatHasBothMembers(currentUser, hit);
+
+    // console.log(exists);
+
+    if (!exists.length) {
+      navigate(`${currentUser.userId}_${hit.objectID}`, {
+        state: { username: hit.username, objectID: hit.objectID },
+      });
+    } else {
+      navigate(`${exists[0]}`, {
+        state: { username: hit.username, objectID: hit.objectID },
+      });
+    }
   };
 
   return (

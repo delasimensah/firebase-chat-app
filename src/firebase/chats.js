@@ -7,7 +7,33 @@ import {
   collection,
   addDoc,
   updateDoc,
+  query,
+  where,
+  getDocs,
 } from "firebase/firestore";
+
+export const checkIfExisitingChatHasBothMembers = async (currentUser, hit) => {
+  const memberOne = {
+    id: currentUser.userId,
+    username: currentUser.username,
+  };
+
+  const memberTwo = {
+    id: hit.objectID,
+    username: hit.username,
+  };
+
+  const q = query(
+    collection(db, "chats"),
+    where("members", "array-contains-any", [memberOne, memberTwo])
+  );
+
+  const querySnapshot = await getDocs(q);
+
+  const data = querySnapshot.docs.map((doc) => doc.id);
+
+  return data;
+};
 
 export const createChat = async (result, currentUser, chatId) => {
   // if (result.username === currentUser.username) {
