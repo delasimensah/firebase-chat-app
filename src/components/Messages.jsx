@@ -13,10 +13,10 @@ import {
   orderBy,
   limit,
 } from "firebase/firestore";
-import { resetUreadMessageCount } from "../firebase/chats";
+import { resetUreadMessageCount, updateLastMessage } from "../firebase/chats";
 
 // mui
-import { Stack, Typography } from "@mui/material";
+import { Stack, CircularProgress } from "@mui/material";
 
 // components
 import MessageGroup from "./MessageGroup";
@@ -33,13 +33,15 @@ const Messages = ({ chatId }) => {
     if (recievedMessagesCount > 0) {
       resetUreadMessageCount(chatId, username);
     }
-  }, [recievedMessagesCount, chatId, username]);
+    updateLastMessage(chatId, username);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recievedMessagesCount, chatId]);
 
   useEffect(() => {
     const q = query(
       collection(db, "chats", chatId, "messages"),
-      orderBy("createdAt", "asc"),
-      limit(100)
+      orderBy("createdAt", "desc"),
+      limit(50)
     );
 
     setLoading(true);
@@ -56,7 +58,7 @@ const Messages = ({ chatId }) => {
 
       setReceivedMessagesCount(receivedMessages.length);
 
-      const newMessages = groupByDate(data);
+      const newMessages = groupByDate(data.reverse());
 
       setMessages(newMessages);
       setLoading(false);
@@ -68,8 +70,13 @@ const Messages = ({ chatId }) => {
   return (
     <>
       {loading ? (
-        <Stack sx={{ flexGrow: 1 }} spacing={1}>
-          <Typography>Loading...</Typography>
+        <Stack
+          sx={{ flexGrow: 1 }}
+          spacing={1}
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CircularProgress color="primary" size={30} />
         </Stack>
       ) : (
         <Stack sx={{ flexGrow: 1, overflowY: "auto" }} spacing={1}>

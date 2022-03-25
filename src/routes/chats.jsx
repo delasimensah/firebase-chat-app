@@ -31,6 +31,7 @@ const Chats = () => {
   const [chats, setChats] = useState(storedChatList);
   const [openNewChatDialog, setOpenNewChatDialog] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [unread, setUnread] = useState(0);
 
   useEffect(() => {
     const q = query(
@@ -51,6 +52,15 @@ const Chats = () => {
         id: doc.id,
         ...doc.data(),
       }));
+
+      const unreadMessages = data.filter((msg) => {
+        return (
+          msg.lastMessage.read === false &&
+          msg.lastMessage.sender !== currentUser.username
+        );
+      });
+
+      setUnread(unreadMessages.length);
 
       setChats(data);
       localStorage.setItem("chatlist", JSON.stringify(data));
@@ -76,6 +86,7 @@ const Chats = () => {
         <ChatListHeader
           openNewChatDialog={openNewChatDialog}
           setOpenNewChatDialog={setOpenNewChatDialog}
+          unread={unread}
         />
 
         {loading ? (

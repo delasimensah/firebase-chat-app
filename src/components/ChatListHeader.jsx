@@ -5,7 +5,7 @@ import { IoLogOutOutline, IoCreateOutline } from "react-icons/io5";
 import { useUser } from "../contexts/UserContext";
 
 // mui
-import { Stack, Typography, IconButton, Tooltip } from "@mui/material";
+import { Stack, Typography, IconButton, Tooltip, Badge } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 // components
@@ -18,7 +18,11 @@ const CustomIconButton = styled(IconButton)({
   },
 });
 
-const ChatListHeader = ({ openNewChatDialog, setOpenNewChatDialog }) => {
+const ChatListHeader = ({
+  openNewChatDialog,
+  setOpenNewChatDialog,
+  unread,
+}) => {
   const { currentUser } = useUser();
 
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
@@ -38,9 +42,11 @@ const ChatListHeader = ({ openNewChatDialog, setOpenNewChatDialog }) => {
         />
       </>
 
-      <Typography sx={{ textTransform: "capitalize" }}>
-        {currentUser.username}
-      </Typography>
+      <Badge color="error" badgeContent={unread} max={99}>
+        <Typography sx={{ textTransform: "capitalize" }}>
+          {currentUser.username}
+        </Typography>
+      </Badge>
 
       <>
         <Tooltip title="New Chat">

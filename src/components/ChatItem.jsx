@@ -73,15 +73,6 @@ const ChatItem = ({ chat, otherMember }) => {
             </Typography>
           }
         />
-        {/* {chat.lastMessage && (
-          <Badge
-            variant="dot"
-            invisible={
-              chat.lastMessage.sender === username || chat.lastMessage.read
-            }
-            color="primary"
-          />
-        )} */}
       </ListItemButton>
     </ListItem>
   );
