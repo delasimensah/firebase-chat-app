@@ -30,8 +30,9 @@ const Messages = ({ chatId }) => {
   const [recievedMessagesCount, setReceivedMessagesCount] = useState(0);
 
   useEffect(() => {
-    resetUreadMessageCount(chatId, username);
-    console.log("run");
+    if (recievedMessagesCount > 0) {
+      resetUreadMessageCount(chatId, username);
+    }
   }, [recievedMessagesCount, chatId, username]);
 
   useEffect(() => {
