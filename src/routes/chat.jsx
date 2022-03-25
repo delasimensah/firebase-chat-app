@@ -1,9 +1,6 @@
 import React from "react";
 import { useLocation, useParams } from "react-router-dom";
 
-// firebase
-// import { updateLastMessage } from "../firebase/chats";
-
 // mui
 import { Stack } from "@mui/material";
 
@@ -31,7 +28,7 @@ const Chat = () => {
 
         <Messages chatId={chat} />
 
-        <MessageForm chatId={chat} />
+        <MessageForm chatId={chat} receipient={state} />
       </Stack>
     </Stack>
   );

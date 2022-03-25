@@ -31,12 +31,8 @@ const ChatItem = ({ chat, otherMember }) => {
       >
         <ListItemAvatar>
           <Badge
-            // variant="dot"
-            // invisible={
-            //   chat.lastMessage?.sender === username || chat.lastMessage?.read
-            // }
             color="error"
-            badgeContent={10}
+            badgeContent={chat[`${username}UnreadMessagesCount`]}
             max={99}
           >
             <Avatar
@@ -72,7 +68,7 @@ const ChatItem = ({ chat, otherMember }) => {
                 color: "#7f8c8d",
               }}
             >
-              {chat.lastMessage.sender === username && "Me: "}
+              {chat.lastMessage?.sender === username && "Me: "}
               {chat.lastMessage?.text}
             </Typography>
           }

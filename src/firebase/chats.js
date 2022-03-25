@@ -31,6 +31,8 @@ export const createChat = async (result, currentUser) => {
     ],
     createdAt: new Date().toISOString(),
     lastMessage: null,
+    [`${currentUser.username}UnreadMessagesCount`]: 0,
+    [`${result.username}UnreadMessagesCount`]: 0,
   });
 };
 
@@ -38,14 +40,17 @@ export const deleteChat = async (chatId) => {
   await deleteDoc(doc(db, "chats", chatId));
 };
 
-export const createMessage = async (chatId, text, sender) => {
+export const createMessage = async (chatId, text, sender, receipient) => {
   const messagesRef = collection(db, "chats", chatId, "messages");
   const chatRef = doc(db, "chats", chatId);
+  const chatSnapshot = await getDoc(chatRef);
+  const data = chatSnapshot.data();
 
   const newMessage = {
     text,
     sender,
-    createdAt: new Date().toDateString(),
+    createdAt: new Date().toISOString(),
+    date: new Date().toDateString(),
     time: new Date().toTimeString(),
     attachments: [],
     read: false,
@@ -57,6 +62,8 @@ export const createMessage = async (chatId, text, sender) => {
   //  update last message for chat
   await updateDoc(chatRef, {
     lastMessage: newMessage,
+    [`${receipient}UnreadMessagesCount`]:
+      data[`${receipient}UnreadMessagesCount`] + 1,
   });
 };
 
@@ -75,4 +82,12 @@ export const updateLastMessage = async (chatId) => {
       },
     });
   }
+};
+
+export const resetUreadMessageCount = async (chatId, currentUser) => {
+  const chatRef = doc(db, "chats", chatId);
+
+  await updateDoc(chatRef, {
+    [`${currentUser}UnreadMessagesCount`]: 0,
+  });
 };

@@ -2,7 +2,7 @@ export const groupByDate = (messages) => {
   const newMessages = [];
 
   const groupedMessages = messages.reduce((acc, obj) => {
-    const key = obj.createdAt;
+    const key = obj.date;
 
     if (!acc[key]) {
       acc[key] = [];

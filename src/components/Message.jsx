@@ -26,10 +26,11 @@ const Message = ({ message }) => {
         display: "inline",
         alignSelf: sender === username ? "flex-end" : "flex-start",
         borderRadius: "20px",
-        border: sender === username ? "0px" : "1px solid #bdc3c7",
+        border: sender === username ? "0px" : "1px solid #ecf0f1",
         background: sender === username ? "#ecf0f1" : "#fff",
         p: 1,
         maxWidth: "280px",
+        fontSize: "14px",
       }}
     >
       {message.text}

@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { groupByDate } from "../utils/groupByDate";
 
+// context
+import { useUser } from "../contexts/UserContext";
+
 // firebase
 import { db } from "../firebase/firebaseConfig";
-import { collection, query, onSnapshot, orderBy } from "firebase/firestore";
+import {
+  collection,
+  query,
+  onSnapshot,
+  orderBy,
+  limit,
+} from "firebase/firestore";
+import { resetUreadMessageCount } from "../firebase/chats";
 
 // mui
 import { Stack, Typography } from "@mui/material";
@@ -12,13 +22,23 @@ import { Stack, Typography } from "@mui/material";
 import MessageGroup from "./MessageGroup";
 
 const Messages = ({ chatId }) => {
+  const {
+    currentUser: { username },
+  } = useUser();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [recievedMessagesCount, setReceivedMessagesCount] = useState(0);
+
+  useEffect(() => {
+    resetUreadMessageCount(chatId, username);
+    console.log("run");
+  }, [recievedMessagesCount, chatId, username]);
 
   useEffect(() => {
     const q = query(
       collection(db, "chats", chatId, "messages"),
-      orderBy("createdAt", "asc")
+      orderBy("createdAt", "asc"),
+      limit(100)
     );
 
     setLoading(true);
@@ -29,6 +49,12 @@ const Messages = ({ chatId }) => {
         ...doc.data(),
       }));
 
+      const receivedMessages = data.filter((message) => {
+        return message.sender !== username;
+      });
+
+      setReceivedMessagesCount(receivedMessages.length);
+
       const newMessages = groupByDate(data);
 
       setMessages(newMessages);
@@ -36,7 +62,7 @@ const Messages = ({ chatId }) => {
     });
 
     return () => unsubscribe();
-  }, [chatId]);
+  }, [chatId, username]);
 
   return (
     <>

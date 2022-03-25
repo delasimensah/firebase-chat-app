@@ -1,4 +1,5 @@
 import React from "react";
+import Moment from "react-moment";
 
 // mui
 import { Stack, Typography } from "@mui/material";
@@ -7,10 +8,13 @@ import { Stack, Typography } from "@mui/material";
 import Message from "./Message";
 
 const MessageGroup = ({ message }) => {
-  console.log(message.messages);
   return (
     <Stack spacing={1}>
-      <Typography sx={{ textAlign: "center" }}>{message.date}</Typography>
+      <Typography
+        sx={{ textAlign: "center", fontSize: "14px", color: "#7f8c8d" }}
+      >
+        <Moment format="MMMM Do YYYY">{message.date}</Moment>
+      </Typography>
 
       <Stack sx={{ py: 1, px: "10px" }} spacing={1}>
         {message.messages.map((message) => {
