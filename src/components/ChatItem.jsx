@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { stringToColor } from "../utils/stringToColor";
+import Moment from "react-moment";
 
 // context
 import { useUser } from "../contexts/UserContext";
+
+// firebase
+import { db } from "../firebase/firebaseConfig";
+import { doc, onSnapshot } from "firebase/firestore";
 
 // mui
 import {
@@ -22,6 +27,18 @@ const ChatItem = ({ chat, otherMember }) => {
   const {
     currentUser: { username },
   } = useUser();
+
+  const [onlineStatus, setOnlineStatus] = useState(null);
+
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "users", otherMember.id), (doc) => {
+      const { isOnline, activeTime } = doc.data();
+
+      setOnlineStatus({ isOnline, activeTime });
+    });
+
+    return unsub;
+  }, [otherMember.id]);
 
   return (
     <ListItem disablePadding>
@@ -72,8 +89,27 @@ const ChatItem = ({ chat, otherMember }) => {
                 color: "#7f8c8d",
               }}
             >
-              {chat.lastMessage?.sender === username && "Me: "}
-              {chat.lastMessage?.text}
+              {!onlineStatus && (
+                <>
+                  {chat.lastMessage?.sender === username && "Me: "}
+                  {chat.lastMessage?.text}
+                </>
+              )}
+
+              {onlineStatus && (
+                <>
+                  {onlineStatus.isOnline ? (
+                    <>
+                      {chat.lastMessage?.sender === username && "Me: "}
+                      {chat.lastMessage?.text}
+                    </>
+                  ) : (
+                    <>
+                      Active <Moment fromNow>{onlineStatus?.activeTime}</Moment>
+                    </>
+                  )}
+                </>
+              )}
             </Typography>
           }
         />

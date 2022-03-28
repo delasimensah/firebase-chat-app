@@ -5,7 +5,11 @@ import { useUser } from "../contexts/UserContext";
 import { useMessage } from "../contexts/MessageContext";
 
 // firebase
-import { createChat, createMessage } from "../firebase/chats";
+import {
+  createChat,
+  createMessage,
+  updateChatActiveTime,
+} from "../firebase/chats";
 
 // mui
 import { Stack, TextField, Button } from "@mui/material";
@@ -23,6 +27,7 @@ const MessageForm = ({ chatId, receipient }) => {
       currentUser.username,
       receipient.username
     );
+    await updateChatActiveTime(chatId);
   };
 
   return (

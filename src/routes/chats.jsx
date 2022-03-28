@@ -40,7 +40,7 @@ const Chats = () => {
         id: currentUser.userId,
         username: currentUser.username,
       }),
-      orderBy("createdAt", "desc")
+      orderBy("activeTime", "desc")
     );
 
     if (!chats.length) {

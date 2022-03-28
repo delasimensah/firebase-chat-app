@@ -52,6 +52,7 @@ export const createChat = async (result, currentUser, chatId) => {
         { id: result.objectID, username: result.username },
       ],
       createdAt: new Date().toISOString(),
+      activeTime: new Date().toISOString(),
       lastMessage: null,
       [`${currentUser.username}UnreadMessagesCount`]: 0,
       [`${result.username}UnreadMessagesCount`]: 0,
@@ -114,5 +115,15 @@ export const resetUreadMessageCount = async (chatId, currentUser) => {
 
   await updateDoc(chatRef, {
     [`${currentUser}UnreadMessagesCount`]: 0,
+  });
+};
+
+export const updateChatActiveTime = async (chatId) => {
+  const chatRef = doc(db, "chats", chatId);
+
+  const newActiveTime = new Date().toISOString();
+
+  await updateDoc(chatRef, {
+    activeTime: newActiveTime,
   });
 };

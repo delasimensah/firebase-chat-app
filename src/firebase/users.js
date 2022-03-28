@@ -33,6 +33,7 @@ export const createUserDocument = async (userAuth, username) => {
 
   const { email } = userAuth;
   const createdAt = new Date().toISOString();
+  const activeTime = new Date().toISOString();
 
   await setDoc(userDocRef, {
     username,
@@ -40,6 +41,7 @@ export const createUserDocument = async (userAuth, username) => {
     createdAt,
     userId: userAuth.uid,
     isOnline: true,
+    activeTime,
   });
 };
 
@@ -49,9 +51,11 @@ export const updateOnlineStatus = async (userId) => {
   const userSnapshot = await getDoc(userDocRef);
 
   const { isOnline } = userSnapshot.data();
+  const newActiveTime = new Date().toISOString();
 
   await updateDoc(userDocRef, {
     isOnline: !isOnline,
+    activeTime: newActiveTime,
   });
 };
 
@@ -63,4 +67,14 @@ export const getUserDocument = async (userId) => {
   const userInfo = userSnapshot.data();
 
   return userInfo;
+};
+
+export const getOnlineStatus = async (userId) => {
+  const userRef = doc(db, "users", userId);
+
+  const userSnapshot = await getDoc(userRef);
+
+  const { isOnline, activeTime } = userSnapshot.data();
+
+  return { isOnline, activeTime };
 };
