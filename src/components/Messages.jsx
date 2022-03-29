@@ -28,6 +28,7 @@ const Messages = ({ chatId }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [recievedMessagesCount, setReceivedMessagesCount] = useState(0);
+  const [loadMore, setLoadMore] = useState(false);
 
   useEffect(() => {
     if (recievedMessagesCount > 0) {
@@ -79,7 +80,20 @@ const Messages = ({ chatId }) => {
           <CircularProgress color="primary" size={30} />
         </Stack>
       ) : (
-        <Stack sx={{ flexGrow: 1, overflowY: "auto" }} spacing={1}>
+        <Stack
+          sx={{ flexGrow: 1, overflowY: "auto" }}
+          spacing={1}
+          onScroll={(e) => {
+            if (e.target.scrollTop === 0) {
+              // todo load more messages
+            }
+          }}
+        >
+          {loadMore && (
+            <Stack alignItems="center">
+              <CircularProgress color="primary" size={20} />
+            </Stack>
+          )}
           {messages.map((message) => {
             return <MessageGroup key={message.date} message={message} />;
           })}

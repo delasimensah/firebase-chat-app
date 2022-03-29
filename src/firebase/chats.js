@@ -25,14 +25,21 @@ export const checkIfExisitingChatHasBothMembers = async (currentUser, hit) => {
 
   const q = query(
     collection(db, "chats"),
-    where("members", "array-contains-any", [memberOne, memberTwo])
+    where("members", "==", [memberOne, memberTwo])
+  );
+
+  const q2 = query(
+    collection(db, "chats"),
+    where("members", "==", [memberTwo, memberOne])
   );
 
   const querySnapshot = await getDocs(q);
+  const querySnapshot2 = await getDocs(q2);
 
   const data = querySnapshot.docs.map((doc) => doc.id);
+  const data2 = querySnapshot2.docs.map((doc) => doc.id);
 
-  return data;
+  return [...data, ...data2];
 };
 
 export const createChat = async (result, currentUser, chatId) => {

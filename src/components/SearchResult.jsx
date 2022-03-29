@@ -25,11 +25,6 @@ const SearchResult = ({ hit }) => {
   const handleCreateChat = async () => {
     const exists = await checkIfExisitingChatHasBothMembers(currentUser, hit);
 
-    console.log({ exists });
-    // navigate(`${currentUser.userId}_${hit.objectID}`, {
-    //   state: { username: hit.username, objectID: hit.objectID },
-    // });
-
     if (!exists.length) {
       navigate(`${currentUser.userId}_${hit.objectID}`, {
         state: { username: hit.username, objectID: hit.objectID },
