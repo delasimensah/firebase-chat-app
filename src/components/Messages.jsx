@@ -12,6 +12,8 @@ import {
   onSnapshot,
   orderBy,
   limit,
+  startAfter,
+  getDocs,
 } from "firebase/firestore";
 import { resetUreadMessageCount, updateLastMessage } from "../firebase/chats";
 
@@ -26,9 +28,11 @@ const Messages = ({ chatId }) => {
     currentUser: { username },
   } = useUser();
   const [messages, setMessages] = useState([]);
+  const [unGroupedMsgs, setUnGroupedMsgs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [recievedMessagesCount, setReceivedMessagesCount] = useState(0);
   const [loadMore, setLoadMore] = useState(false);
+  const [lastMessage, setLastMessage] = useState(null);
 
   useEffect(() => {
     if (recievedMessagesCount > 0) {
@@ -38,11 +42,40 @@ const Messages = ({ chatId }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recievedMessagesCount, chatId]);
 
+  const getNextBatch = async () => {
+    setLoadMore(true);
+
+    const q = query(
+      collection(db, "chats", chatId, "messages"),
+      orderBy("createdAt", "desc"),
+      startAfter(lastMessage),
+      limit(5)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    const data = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    const newMessages = [...data.reverse(), ...unGroupedMsgs];
+    setUnGroupedMsgs(newMessages);
+
+    const groupedMessages = groupByDate(newMessages);
+
+    const lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+    setLastMessage(lastDoc);
+
+    setMessages(groupedMessages);
+    setLoadMore(false);
+  };
+
   useEffect(() => {
     const q = query(
       collection(db, "chats", chatId, "messages"),
       orderBy("createdAt", "desc"),
-      limit(50)
+      limit(100)
     );
 
     setLoading(true);
@@ -53,15 +86,20 @@ const Messages = ({ chatId }) => {
         ...doc.data(),
       }));
 
+      setUnGroupedMsgs(data);
+
+      const lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+      setLastMessage(lastDoc);
+
       const receivedMessages = data.filter((message) => {
         return message.sender !== username;
       });
 
       setReceivedMessagesCount(receivedMessages.length);
 
-      const newMessages = groupByDate(data.reverse());
+      const groupedMessages = groupByDate(data.reverse());
 
-      setMessages(newMessages);
+      setMessages(groupedMessages);
       setLoading(false);
     });
 
@@ -82,10 +120,14 @@ const Messages = ({ chatId }) => {
       ) : (
         <Stack
           sx={{ flexGrow: 1, overflowY: "auto" }}
-          spacing={1}
+          spacing={5}
           onScroll={(e) => {
             if (e.target.scrollTop === 0) {
               // todo load more messages
+              if (lastMessage) {
+                getNextBatch();
+                console.log("called 3");
+              }
             }
           }}
         >
