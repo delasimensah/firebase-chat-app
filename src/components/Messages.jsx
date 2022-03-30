@@ -49,7 +49,7 @@ const Messages = ({ chatId }) => {
       collection(db, "chats", chatId, "messages"),
       orderBy("createdAt", "desc"),
       startAfter(lastMessage),
-      limit(5)
+      limit(100)
     );
 
     const querySnapshot = await getDocs(q);
